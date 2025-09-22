@@ -3,80 +3,59 @@ package AllynnAlvarico;
 import AllynnAlvarico.enums.CountyIdentifier;
 import AllynnAlvarico.model.Car;
 import AllynnAlvarico.model.Driver;
+import AllynnAlvarico.model.Policy;
 import AllynnAlvarico.service.PolicyRegistrationService;
+import AllynnAlvarico.utils.Input;
 
 import java.util.Scanner;
 
 public class Main {
     Scanner scanner = new Scanner(System.in);
     PolicyRegistrationService prs = new PolicyRegistrationService();
-
+    Input input = new Input();
     public Main(){
+//        Driver newDrive = driverDetails();
+        Car newCar = carDetails();
+//        System.out.println(newDrive.fullName() + " " + newDrive);
+        System.out.println(newCar.getRegistrationNumber() + " " + newCar);
+    }
+
+    public Driver driverDetails(){
         String name;
         String surname;
         String license;
         String contact;
         byte points;
+        System.out.println("Enter new Driver details:");
+        name = input.driverName();
+        surname = input.driverSurname();
+        license = input.driverLicense();
+        contact = input.driverContact();
+        points = input.driverPoints();
 
+        return prs.registerDriver(name, surname, license, contact, points);
+    }
+    public Car carDetails(){
         short sequenceNumber;
         String countyIdentifier;
         String year;
         float engineSize;
         boolean hasPass;
-        String userResponse;
-
-        System.out.println("Enter new Driver details:");
-        System.out.println("Name:");
-        name = scanner.nextLine();
-        System.out.println("Surname:");
-        surname = scanner.nextLine();
-        System.out.println("license Number:");
-        license = scanner.nextLine();
-        System.out.println("Contact Number:");
-        contact = scanner.nextLine();
-        System.out.println("License Points:");
-        points = scanner.nextByte();
-
         System.out.println("Enter car details:");
-        System.out.println("Sequence Number:");
-        sequenceNumber = scanner.nextShort();
-        scanner.nextLine();
-        System.out.println("County Identifier:");
-        countyIdentifier = scanner.nextLine();
-        System.out.println("Car year manufactured:");
-        year = scanner.nextLine();
-        System.out.println("Engine Size:");
-        engineSize = scanner.nextFloat();
-        scanner.nextLine();
-
-        do {
-            System.out.println("\ntype 'yes' or 'y' for pass. Type 'no' or 'n' ");
-            System.out.println("Pass NCT:");
-            userResponse = scanner.nextLine();
-        } while (responseProcess(userResponse) >= 3);
-
-        Driver newDriver = prs.registerDriver(name, surname, license, contact, points);
-        Car newCar = prs.registerCar(sequenceNumber, countyIdentifier, year, engineSize, hasPassed(responseProcess(userResponse)));
-
-        System.out.println(newDriver.fullName() + " " + newDriver);
-        System.out.println(newCar.getRegistrationNumber() + " " + newCar);
+        sequenceNumber = input.carSequence();
+//        sequenceNumber = 1234;
+        countyIdentifier = input.carCountyIdentity();
+//        countyIdentifier = "Cork";
+        year = input.carYearManufactured();
+//        year = "2012";
+        engineSize = input.carEngineSize();
+//        engineSize = 2.0F;
+        hasPass = input.carNCT();
+        return prs.registerCar(sequenceNumber, countyIdentifier, year, engineSize, hasPass);
     }
-
-    public boolean hasPassed(int userResponse){
-        return userResponse == 1;
-    }
-
-    public int responseProcess(String userResponse){
-        if (userResponse.trim().equalsIgnoreCase("yes") | userResponse.trim().equalsIgnoreCase("y")){
-            return 1;
-        } else if (userResponse.trim().equalsIgnoreCase("no") | userResponse.trim().equalsIgnoreCase("n")) {
-            return 0;
-        } else {
-            return 3;
-        }
-    }
-
-
+//    public Policy policyDetail(){
+//        return prs.newPolicy();
+//    }
     public static void main(String[] args) {
         new Main();
     }
